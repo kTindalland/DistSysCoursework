@@ -25,8 +25,6 @@ namespace DistSysAcw.Controllers
         [HttpGet]
         public IActionResult Sort()
         {
-            var response = new ContentResult();
-
             var items = Request.Query["integers"].ToArray();
 
             var numbers = new List<int>();
@@ -55,15 +53,12 @@ namespace DistSysAcw.Controllers
                 
             }
 
-            response.StatusCode = 200;
-            response.Content = numbers.ToArray().ToString();
+            var response = new JsonResult(numbers)
+            {
+                StatusCode = 200
+            };
 
-                var a = new JsonResult(numbers)
-                {
-                    StatusCode = 200
-                };
-
-            return a;
+            return response;
         }
         #region TASK1
         /*

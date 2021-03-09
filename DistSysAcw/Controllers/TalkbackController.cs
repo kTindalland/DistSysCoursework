@@ -13,7 +13,6 @@ namespace DistSysAcw.Controllers
         /// <param name="context">DbContext set as a service in Startup.cs and dependency injected</param>
         public TalkbackController(Models.UserContext dbcontext) : base(dbcontext) { }
 
-        [Authorize(Roles = "User")]
         [ActionName("Hello")]
         [HttpGet]
         public string HelloWorld()

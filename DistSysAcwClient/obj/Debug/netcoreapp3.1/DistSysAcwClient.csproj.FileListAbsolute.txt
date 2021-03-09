@@ -2,3 +2,18 @@ C:\Box\Box Sync\Lecturing\DistributedSystems\2021\ACW\NEW\DistSysAcw\DistSysAcwC
 C:\Box\Box Sync\Lecturing\DistributedSystems\2021\ACW\NEW\DistSysAcw\DistSysAcwClient\obj\Debug\netcoreapp3.1\DistSysAcwClient.csprojAssemblyReference.cache
 C:\Box\Box Sync\Lecturing\DistributedSystems\2021\ACW\NEW\DistSysAcw\DistSysAcwClient\obj\Debug\netcoreapp3.1\DistSysAcwClient.AssemblyInfoInputs.cache
 C:\Box\Box Sync\Lecturing\DistributedSystems\2021\ACW\NEW\DistSysAcw\DistSysAcwClient\obj\Debug\netcoreapp3.1\DistSysAcwClient.AssemblyInfo.cs
+D:\source\repos\DistSysAcw\DistSysAcwClient\bin\Debug\netcoreapp3.1\DistSysAcwClient.exe
+D:\source\repos\DistSysAcw\DistSysAcwClient\bin\Debug\netcoreapp3.1\DistSysAcwClient.deps.json
+D:\source\repos\DistSysAcw\DistSysAcwClient\bin\Debug\netcoreapp3.1\DistSysAcwClient.runtimeconfig.json
+D:\source\repos\DistSysAcw\DistSysAcwClient\bin\Debug\netcoreapp3.1\DistSysAcwClient.runtimeconfig.dev.json
+D:\source\repos\DistSysAcw\DistSysAcwClient\bin\Debug\netcoreapp3.1\DistSysAcwClient.dll
+D:\source\repos\DistSysAcw\DistSysAcwClient\bin\Debug\netcoreapp3.1\DistSysAcwClient.pdb
+D:\source\repos\DistSysAcw\DistSysAcwClient\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+D:\source\repos\DistSysAcw\DistSysAcwClient\obj\Debug\netcoreapp3.1\DistSysAcwClient.csprojAssemblyReference.cache
+D:\source\repos\DistSysAcw\DistSysAcwClient\obj\Debug\netcoreapp3.1\DistSysAcwClient.AssemblyInfoInputs.cache
+D:\source\repos\DistSysAcw\DistSysAcwClient\obj\Debug\netcoreapp3.1\DistSysAcwClient.AssemblyInfo.cs
+D:\source\repos\DistSysAcw\DistSysAcwClient\obj\Debug\netcoreapp3.1\DistSysAcwClient.csproj.CoreCompileInputs.cache
+D:\source\repos\DistSysAcw\DistSysAcwClient\obj\Debug\netcoreapp3.1\DistSysAcwClient.csproj.CopyComplete
+D:\source\repos\DistSysAcw\DistSysAcwClient\obj\Debug\netcoreapp3.1\DistSysAcwClient.dll
+D:\source\repos\DistSysAcw\DistSysAcwClient\obj\Debug\netcoreapp3.1\DistSysAcwClient.pdb
+D:\source\repos\DistSysAcw\DistSysAcwClient\obj\Debug\netcoreapp3.1\DistSysAcwClient.genruntimeconfig.cache

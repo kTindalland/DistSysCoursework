@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace DistSysAcw.Controllers
 {
@@ -11,21 +12,67 @@ namespace DistSysAcw.Controllers
         /// <param name="context">DbContext set as a service in Startup.cs and dependency injected</param>
         public TalkbackController(Models.UserContext dbcontext) : base(dbcontext) { }
 
-        //[ActionName("Hello")]
-        //public string Get()
-        //{
-        //    #region TASK1
-        //    // TODO: add api/talkback/hello response
-        //    #endregion
-        //}
+        [ActionName("Hello")]
+        [HttpGet]
+        public string HelloWorld()
+        {
+            #region TASK1
+            return "Hello world";
+            #endregion
+        }
 
-        //[ActionName("Sort")]
-        //    #region TASK1
-        //       TODO:
-        //       add a parameter to get integers from the URI query
-        //       sort the integers into ascending order
-        //       send the integers back as the api/talkback/sort response
-        //       conform to the error handling requirements in the spec
-        //    #endregion
+        [ActionName("Sort")]
+        [HttpGet]
+        public IActionResult Sort()
+        {
+            var response = new ContentResult();
+
+            var items = Request.Query["integers"].ToArray();
+
+            var numbers = new List<int>();
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                bool valid = false;
+                int result;
+
+                valid = int.TryParse(items[i], out result);
+
+                if (!valid)
+                {
+                    // Handle not valid
+                    return new ContentResult()
+                    {
+                        Content = "Bad Request",
+                        StatusCode = 400
+                    };
+                }
+                else
+                {
+                    numbers.Add(result);
+                }
+
+                
+            }
+
+            response.StatusCode = 200;
+            response.Content = numbers.ToArray().ToString();
+
+                var a = new JsonResult(numbers)
+                {
+                    StatusCode = 200
+                };
+
+            return a;
+        }
+        #region TASK1
+        /*
+        TODO:
+               add a parameter to get integers from the URI query
+               sort the integers into ascending order
+               send the integers back as the api/talkback/sort response
+               conform to the error handling requirements in the spec
+        */
+        #endregion
     }
 }

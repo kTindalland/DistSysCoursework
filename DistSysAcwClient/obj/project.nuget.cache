@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "yE7bKS5Hd5N/0qaG8JjFW35gPQelYMdk6tevwfiZErsu7VsV/KP6Sm0vsvq0Fh/uMJAnB/XKK22Cw9RVceC/PQ==",
+  "success": true,
+  "projectFilePath": "D:\\source\\repos\\DistSysAcw\\DistSysAcwClient\\DistSysAcwClient.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\kaiti\\.nuget\\packages\\newtonsoft.json\\12.0.3\\newtonsoft.json.12.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

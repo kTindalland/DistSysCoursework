@@ -52,23 +52,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\jwddi\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\kaiti\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Box Sync\\Lecturing\\DistributedSystems\\2021\\ACW\\NEW 2021\\DistSysAcw\\DistSysAcwClient\\DistSysAcwClient.csproj",
+      "projectUniqueName": "D:\\source\\repos\\DistSysAcw\\DistSysAcwClient\\DistSysAcwClient.csproj",
       "projectName": "DistSysAcwClient",
-      "projectPath": "D:\\Box Sync\\Lecturing\\DistributedSystems\\2021\\ACW\\NEW 2021\\DistSysAcw\\DistSysAcwClient\\DistSysAcwClient.csproj",
-      "packagesPath": "C:\\Users\\jwddi\\.nuget\\packages\\",
-      "outputPath": "D:\\Box Sync\\Lecturing\\DistributedSystems\\2021\\ACW\\NEW 2021\\DistSysAcw\\DistSysAcwClient\\obj\\",
+      "projectPath": "D:\\source\\repos\\DistSysAcw\\DistSysAcwClient\\DistSysAcwClient.csproj",
+      "packagesPath": "C:\\Users\\kaiti\\.nuget\\packages\\",
+      "outputPath": "D:\\source\\repos\\DistSysAcw\\DistSysAcwClient\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-      ],
       "configFilePaths": [
-        "C:\\Users\\jwddi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\kaiti\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -80,6 +76,7 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {}
         }
       },
@@ -91,6 +88,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "Newtonsoft.Json": {
             "target": "Package",
@@ -112,7 +110,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.405\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -29,7 +29,7 @@ namespace DistSysAcw.Models
         // TODO: Make methods which allow us to read from/write to the database 
         #endregion
 
-        static Guid CreateUser(UserContext context, string username)
+        public static Guid CreateUser(UserContext context, string username)
         {
             var guid = Guid.NewGuid();
 
@@ -61,17 +61,22 @@ namespace DistSysAcw.Models
             return guid;
         }
 
-        static bool CheckGuid(UserContext context, string guid)
+        public static bool CheckGuid(UserContext context, string guid)
         {
             return context.Users.Any(u => u.ApiKey == guid);
         }
 
-        static bool CheckUser(UserContext context, string guid, string username)
+        public static bool CheckUsername(UserContext context, string username)
+        {
+            return context.Users.Any(u => u.UserName == username);
+        }
+
+        public static bool CheckUser(UserContext context, string guid, string username)
         {
             return context.Users.Any(u => u.ApiKey == guid && u.UserName == username);
         }
 
-        static User GetUser(UserContext context, string guid)
+        public static User GetUser(UserContext context, string guid)
         {
             var user = new User()
             {
@@ -90,7 +95,7 @@ namespace DistSysAcw.Models
             return user;
         }
 
-        static void DeleteUser(UserContext context, string guid)
+        public static void DeleteUser(UserContext context, string guid)
         {
             var exists = CheckGuid(context, guid);
 

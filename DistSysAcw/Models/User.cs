@@ -8,10 +8,6 @@ namespace DistSysAcw.Models
 {
     public class User
     {
-        #region Task2
-        // TODO: Create a User Class for use with Entity Framework
-        // Note that you can use the [key] attribute to set your ApiKey Guid as the primary key 
-        #endregion
         public User()
         {
 
@@ -32,6 +28,79 @@ namespace DistSysAcw.Models
         #region Task3 
         // TODO: Make methods which allow us to read from/write to the database 
         #endregion
+
+        static Guid CreateUser(UserContext context, string username)
+        {
+            var guid = Guid.NewGuid();
+
+            bool valid = false;
+            while (!valid)
+            {
+                if (CheckGuid(context, guid.ToString()))
+                {
+                    // Already exists
+                    guid = Guid.NewGuid();
+                }
+                else
+                {
+                    valid = true;
+                }
+            }
+
+            var newUser = new User()
+            {
+                ApiKey = guid.ToString(),
+                Role = "User",
+                UserName = username
+            };
+
+            context.Users.Add(newUser);
+
+            context.SaveChanges();
+
+            return guid;
+        }
+
+        static bool CheckGuid(UserContext context, string guid)
+        {
+            return context.Users.Any(u => u.ApiKey == guid);
+        }
+
+        static bool CheckUser(UserContext context, string guid, string username)
+        {
+            return context.Users.Any(u => u.ApiKey == guid && u.UserName == username);
+        }
+
+        static User GetUser(UserContext context, string guid)
+        {
+            var user = new User()
+            {
+                ApiKey = "UNDEFINED",
+                Role = "UNDEFINED",
+                UserName = ""
+            };
+
+            var exists = CheckGuid(context, guid);
+
+            if (exists)
+            {
+                user = context.Users.First(u => u.ApiKey == guid);
+            }
+
+            return user;
+        }
+
+        static void DeleteUser(UserContext context, string guid)
+        {
+            var exists = CheckGuid(context, guid);
+
+            if (exists)
+            {
+                var user = GetUser(context, guid);
+                context.Users.Remove(user);
+            }
+        }
+
     }
 
 

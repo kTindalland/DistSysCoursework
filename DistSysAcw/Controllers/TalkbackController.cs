@@ -60,14 +60,5 @@ namespace DistSysAcw.Controllers
 
             return response;
         }
-        #region TASK1
-        /*
-        TODO:
-               add a parameter to get integers from the URI query
-               sort the integers into ascending order
-               send the integers back as the api/talkback/sort response
-               conform to the error handling requirements in the spec
-        */
-        #endregion
     }
 }

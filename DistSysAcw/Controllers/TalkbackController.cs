@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DistSysAcw.Controllers
 {
@@ -12,6 +13,7 @@ namespace DistSysAcw.Controllers
         /// <param name="context">DbContext set as a service in Startup.cs and dependency injected</param>
         public TalkbackController(Models.UserContext dbcontext) : base(dbcontext) { }
 
+        [Authorize(Roles = "User")]
         [ActionName("Hello")]
         [HttpGet]
         public string HelloWorld()

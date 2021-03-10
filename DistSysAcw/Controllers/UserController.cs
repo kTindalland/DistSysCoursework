@@ -1,5 +1,6 @@
 ﻿using DistSysAcw.Models;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -125,6 +126,32 @@ namespace DistSysAcw.Controllers
                     ContentType = "text/plain"
                 };
             }
+        }
+
+        [Authorize(Roles = "Admin, User")]
+        [HttpDelete]
+        public bool RemoveUser([FromQuery]string username, [FromHeader]string ApiKey)
+        {
+            Response.StatusCode = 200; // Set status code to OK 200
+
+            // Check if ApiKey is in db
+            if (!UserDatabaseAccess.CheckGuid(DbContext, ApiKey))
+            {
+                return false;
+            }
+
+            // Check ApiKey and username line up
+            var apiKeyUser = UserDatabaseAccess.GetUser(DbContext, ApiKey);
+
+            if (apiKeyUser.UserName != username)
+            {
+                return false;
+            }
+
+            // Delete user from db
+            UserDatabaseAccess.DeleteUser(DbContext, ApiKey);
+
+            return true;
         }
     }
 }

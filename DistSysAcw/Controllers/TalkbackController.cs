@@ -54,6 +54,8 @@ namespace DistSysAcw.Controllers
                 
             }
 
+            numbers.Sort();
+
             var response = new JsonResult(numbers)
             {
                 StatusCode = 200

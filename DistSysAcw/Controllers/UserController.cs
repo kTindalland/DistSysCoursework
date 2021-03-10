@@ -154,13 +154,79 @@ namespace DistSysAcw.Controllers
             return true;
         }
 
-        //[Authorize(Roles = "Admin")]
-        //public IActionResult ChangeRole()
-        //{
-        //    JsonSerializerSettings bleh = new JsonSerializerSettings()
-        //    {
-                
-        //    }
-        //}
+        [Authorize(Roles = "Admin")]
+        public IActionResult ChangeRole()
+        {
+            // Get if it's in JSON
+            var contentType = Request.Headers["Content-Type"][0];
+
+            if (contentType != "application/json")
+            {
+                // Not JSON
+                return new UnsupportedMediaTypeResult();
+            }
+
+            // Get body as string
+            string body;
+            using (var reader = new StreamReader(this.Request.Body))
+            {
+                var bodyTask = reader.ReadToEndAsync();
+
+                bodyTask.Wait();
+                body = bodyTask.Result;
+            }
+
+            // Get Json object
+            var items = new Dictionary<string, string>();
+            items = (Dictionary<string, string>)JsonSerializer.Deserialize(body, items.GetType());
+
+            // Check keys
+            if (items.ContainsKey("username") && items.ContainsKey("role"))
+            {
+                // Correct keys
+                // Check if user exists
+                if (!UserDatabaseAccess.CheckUsername(DbContext, items["username"]))
+                {
+                    // User doesn't exist
+                    return new ContentResult()
+                    {
+                        Content = "NOT DONE: Username does not exist",
+                        StatusCode = 400,
+                        ContentType = "text/plain"
+                    };
+                }
+
+                // Check if role exists
+                if (!(items["role"] == "User" || items["role"] == "Admin"))
+                {
+                    // Role doesn't exist
+                    return new ContentResult()
+                    {
+                        Content = "NOT DONE: Role does not exist",
+                        StatusCode = 400,
+                        ContentType = "text/plain"
+                    };
+                }
+
+                // All checks done. Do work
+                UserDatabaseAccess.ChangeRole(DbContext, items["username"], items["role"]);
+
+                return new ContentResult()
+                {
+                    Content = "DONE",
+                    StatusCode = 200,
+                    ContentType = "text/plain"
+                };
+            }
+            else // Incorrect keys
+            {
+                return new ContentResult()
+                {
+                    Content = "NOT DONE: An error occured",
+                    StatusCode = 400,
+                    ContentType = "text/plain"
+                };
+            }
+        }
     }
 }

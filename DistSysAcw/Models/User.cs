@@ -47,10 +47,12 @@ namespace DistSysAcw.Models
                 }
             }
 
+            var roleString = context.Users.Count() == 0 ? "Admin" : "User";
+
             var newUser = new User()
             {
                 ApiKey = guid.ToString(),
-                Role = "User",
+                Role = roleString,
                 UserName = username
             };
 
@@ -95,6 +97,25 @@ namespace DistSysAcw.Models
             return user;
         }
 
+        public static User GetUserUsername(UserContext context, string username)
+        {
+            var user = new User()
+            {
+                ApiKey = "UNDEFINED",
+                Role = "UNDEFINED",
+                UserName = ""
+            };
+
+            var exists = CheckUsername(context, username);
+
+            if (exists)
+            {
+                user = context.Users.First(u => u.UserName == username);
+            }
+
+            return user;
+        }
+
         public static void DeleteUser(UserContext context, string guid)
         {
             var exists = CheckGuid(context, guid);
@@ -104,6 +125,15 @@ namespace DistSysAcw.Models
                 var user = GetUser(context, guid);
                 context.Users.Remove(user);
             }
+
+            context.SaveChanges();
+        }
+
+        public static void ChangeRole(UserContext context, string username, string role)
+        {
+            var user = GetUserUsername(context, username);
+
+            user.Role = role;
 
             context.SaveChanges();
         }

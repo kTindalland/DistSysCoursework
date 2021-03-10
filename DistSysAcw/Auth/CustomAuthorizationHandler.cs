@@ -31,14 +31,35 @@ namespace DistSysAcw.Auth
 
             if (context.User != null && context.User.Identity.IsAuthenticated)
             {
-                foreach (string role in requirement.AllowedRoles)
+                // Handle specific Admin only
+                if (requirement.AllowedRoles.Count() == 1 && requirement.AllowedRoles.First() == "Admin")
                 {
-                    if (context.User.IsInRole(role))
+                    if (context.User.IsInRole("Admin"))
                     {
                         context.Succeed(requirement);
                         return Task.CompletedTask;
                     }
+                    else
+                    {
+                        HttpContextAccessor.HttpContext.Response.StatusCode = 403;
+                        var write = HttpContextAccessor.HttpContext.Response.WriteAsync("Forbidden. Admin access only.");
+
+                        write.Wait();
+                        context.Fail();
+                        return Task.CompletedTask;
+                    }
                 }
+                else
+                {
+                    foreach (string role in requirement.AllowedRoles)
+                    {
+                        if (context.User.IsInRole(role))
+                        {
+                            context.Succeed(requirement);
+                            return Task.CompletedTask;
+                        }
+                    }
+                }                
             }
             
             context.Fail();

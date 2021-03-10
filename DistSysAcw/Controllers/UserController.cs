@@ -69,7 +69,7 @@ namespace DistSysAcw.Controllers
                 return new UnsupportedMediaTypeResult();
             }
 
-
+            
             string username;
             using (var reader = new StreamReader(this.Request.Body))
             {

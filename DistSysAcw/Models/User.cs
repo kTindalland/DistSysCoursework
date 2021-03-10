@@ -104,6 +104,8 @@ namespace DistSysAcw.Models
                 var user = GetUser(context, guid);
                 context.Users.Remove(user);
             }
+
+            context.SaveChanges();
         }
 
     }

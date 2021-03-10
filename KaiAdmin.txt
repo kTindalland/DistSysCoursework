@@ -1,2 +1,6 @@
 KaiAdmin
 50389f5f-94ab-4884-8817-5efadd27ef06
+
+// Test Server
+TestKaiUser
+a797a242-1412-4809-82c5-a493071d9a8b

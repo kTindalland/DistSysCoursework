@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Newtonsoft.Json;
+using System.Text.Json;
 
 using System;
 using System.Collections.Generic;
@@ -90,7 +90,7 @@ namespace DistSysAcw.Controllers
 
                 try
                 {
-                    username = JsonConvert.DeserializeObject<string>(body);
+                    username = (string)JsonSerializer.Deserialize(body, typeof(string));
                 }
                 catch
                 {
@@ -153,5 +153,14 @@ namespace DistSysAcw.Controllers
 
             return true;
         }
+
+        //[Authorize(Roles = "Admin")]
+        //public IActionResult ChangeRole()
+        //{
+        //    JsonSerializerSettings bleh = new JsonSerializerSettings()
+        //    {
+                
+        //    }
+        //}
     }
 }

@@ -155,6 +155,7 @@ namespace DistSysAcw.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [HttpPost]
         public IActionResult ChangeRole()
         {
             // Get if it's in JSON

@@ -16,9 +16,10 @@ namespace DistSysAcw.Controllers
 {
     public class ProtectedController : BaseController
     {
-        public ProtectedController(UserContext context) : base(context)
+        private RSACryptoServiceProvider _cryptoService;
+        public ProtectedController(UserContext context, RSACryptoServiceProvider cryptoService) : base(context)
         {
-
+            _cryptoService = cryptoService;
         }
 
         [Authorize(Roles = "Admin, User")]
@@ -61,6 +62,18 @@ namespace DistSysAcw.Controllers
             var hashResult = BitConverter.ToString(hashServ.Hash).Replace("-", string.Empty);
 
             return hashResult;
+        }
+
+        [Authorize(Roles = "Admin, User")] // Checks valid ApiKey
+        [HttpGet]
+        public IActionResult GetPublicKey()
+        {
+            return new ContentResult()
+            {
+                Content = _cryptoService.ToXmlString(false),
+                StatusCode = 200,
+                ContentType = "application/xml"
+            };
         }
     }
 }

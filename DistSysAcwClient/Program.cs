@@ -25,6 +25,7 @@ namespace DistSysAcwClient
         static readonly HttpClient client = new HttpClient();
         static User clientUser = new User();
         static string baseUri = "https://localhost:44394/api/";
+        static string pubKey;
 
         static void Main(string[] args)
         {
@@ -349,6 +350,41 @@ namespace DistSysAcwClient
                     stringTask.Wait();
 
                     Console.WriteLine(stringTask.Result);
+
+                    break;
+
+                case "Get":
+                    if (words.Length < 3)
+                    {
+                        Console.WriteLine("Please Enter Message.");
+                        return;
+                    }
+                    if (words[2] != "PublicKey")
+                    {
+                        Console.WriteLine("Please Enter a Valid Command.");
+                        return;
+                    }
+
+                    // Check locals
+                    if (CheckLocals()) { break; }
+
+                    resultTask = SendRequest($"protected/getpublickey", HttpMethod.Get, true);
+                    Console.WriteLine("...please wait...");
+                    resultTask.Wait();
+
+                    stringTask = resultTask.Result.Content.ReadAsStringAsync();
+                    stringTask.Wait();
+
+                    if (resultTask.Result.StatusCode == HttpStatusCode.OK)
+                    {
+                        pubKey = stringTask.Result;
+
+                        Console.WriteLine("Got Public Key");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Couldn't Get the Public Key");
+                    }
 
                     break;
 

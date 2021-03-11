@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+using System.Security.Cryptography;
+
 namespace DistSysAcw
 {
     public class Startup
@@ -37,6 +39,15 @@ namespace DistSysAcw
                     ("CustomAuthentication", options => { });
 
             services.AddTransient<IAuthorizationHandler, Auth.CustomAuthorizationHandler>();
+            services.AddSingleton<RSACryptoServiceProvider>(s => {
+                var cspParams = new CspParameters
+                {
+                    Flags = CspProviderFlags.UseMachineKeyStore
+                };
+                var serv = new RSACryptoServiceProvider(cspParams);
+                return serv;
+            });
+            
 
         }
 
@@ -59,6 +70,8 @@ namespace DistSysAcw
             {
                 endpoints.MapControllers();
             });
+
+            
         }
     }
 }

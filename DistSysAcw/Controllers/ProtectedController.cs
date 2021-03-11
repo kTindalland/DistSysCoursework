@@ -75,5 +75,23 @@ namespace DistSysAcw.Controllers
                 ContentType = "application/xml"
             };
         }
+
+        [Authorize(Roles = "Admin, User")]
+        [HttpGet]
+        public IActionResult Sign([FromQuery]string message)
+        {
+            var messageBytes = Encoding.ASCII.GetBytes(message);
+
+            var signedBytes = _cryptoService.SignData(messageBytes, new SHA1CryptoServiceProvider());
+
+            var result = BitConverter.ToString(signedBytes);
+
+            return new ContentResult()
+            {
+                Content = result,
+                StatusCode = 200,
+                ContentType = "text/plain"
+            };
+        }
     }
 }

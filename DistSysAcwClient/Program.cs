@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -384,6 +385,59 @@ namespace DistSysAcwClient
                     else
                     {
                         Console.WriteLine("Couldn't Get the Public Key");
+                    }
+
+                    break;
+
+                case "Sign":
+                    if (words.Length < 3)
+                    {
+                        Console.WriteLine("Please Enter Message.");
+                        return;
+                    }
+
+                    // Check locals
+                    if (CheckLocals()) { break; }
+
+                    if (pubKey == "")
+                    {
+                        Console.WriteLine("Client doesn't yet have the public key");
+                        break;
+                    }
+
+                    resultTask = SendRequest($"protected/sign?message={words[2]}", HttpMethod.Get, true);
+                    Console.WriteLine("...please wait...");
+                    resultTask.Wait();
+
+                    stringTask = resultTask.Result.Content.ReadAsStringAsync();
+                    stringTask.Wait();
+
+                    if (resultTask.Result.StatusCode == HttpStatusCode.OK)
+                    {
+                        var signedMessage = stringTask.Result;
+
+                        var cspParams = new CspParameters
+                        {
+                            Flags = CspProviderFlags.UseMachineKeyStore,
+                        };
+                        var rsa = new RSACryptoServiceProvider(cspParams);
+
+                        rsa.FromXmlString(pubKey);
+
+                        var result = rsa.VerifyData(Encoding.ASCII.GetBytes(words[2]), new SHA1CryptoServiceProvider(), Encoding.ASCII.GetBytes(signedMessage));
+
+                        if (result)
+                        {
+                            Console.WriteLine("Message was successfully signed");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Message was not successfully signed");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine(stringTask.Result);
                     }
 
                     break;

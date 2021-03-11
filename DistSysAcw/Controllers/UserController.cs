@@ -159,7 +159,7 @@ namespace DistSysAcw.Controllers
         public IActionResult ChangeRole()
         {
             // Get if it's in JSON
-            var contentType = Request.Headers["Content-Type"][0];
+            var contentType = Request.ContentType;
 
             if (contentType != "application/json")
             {
@@ -179,7 +179,20 @@ namespace DistSysAcw.Controllers
 
             // Get Json object
             var items = new Dictionary<string, string>();
-            items = (Dictionary<string, string>)JsonSerializer.Deserialize(body, items.GetType());
+            try
+            {
+                items = (Dictionary<string, string>)JsonSerializer.Deserialize(body, items.GetType());
+            }
+            catch
+            {
+                return new ContentResult()
+                {
+                    Content = "NOT DONE: An error occured",
+                    StatusCode = 400,
+                    ContentType = "text/plain"
+                };
+            }
+            
 
             // Check keys
             if (items.ContainsKey("username") && items.ContainsKey("role"))

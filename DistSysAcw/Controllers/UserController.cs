@@ -137,6 +137,7 @@ namespace DistSysAcw.Controllers
             // Check if ApiKey is in db
             if (!UserDatabaseAccess.CheckGuid(DbContext, ApiKey))
             {
+                UserDatabaseAccess.WriteLog(DbContext, ApiKey, $"Tried to remove user {username}, but failed.");
                 return false;
             }
 
@@ -145,11 +146,14 @@ namespace DistSysAcw.Controllers
 
             if (apiKeyUser.UserName != username)
             {
+                UserDatabaseAccess.WriteLog(DbContext, ApiKey, $"Tried to remove user {username}, but failed.");
                 return false;
             }
 
             // Delete user from db
             UserDatabaseAccess.DeleteUser(DbContext, ApiKey);
+
+            UserDatabaseAccess.WriteLog(DbContext, ApiKey, $"Deleted user {username}");
 
             return true;
         }
@@ -163,6 +167,7 @@ namespace DistSysAcw.Controllers
 
             if (contentType != "application/json")
             {
+                UserDatabaseAccess.WriteLog(DbContext, Request.Headers["ApiKey"], "Tried to change a role but didn't use Json formatting.");
                 // Not JSON
                 return new UnsupportedMediaTypeResult();
             }
@@ -185,6 +190,7 @@ namespace DistSysAcw.Controllers
             }
             catch
             {
+                UserDatabaseAccess.WriteLog(DbContext, Request.Headers["ApiKey"], "Tried to change a role. But the Json didn't serialise.");
                 return new ContentResult()
                 {
                     Content = "NOT DONE: An error occured",
@@ -201,6 +207,7 @@ namespace DistSysAcw.Controllers
                 // Check if user exists
                 if (!UserDatabaseAccess.CheckUsername(DbContext, items["username"]))
                 {
+                    UserDatabaseAccess.WriteLog(DbContext, Request.Headers["ApiKey"], "Tried to change a role. But the user didn't exist.");
                     // User doesn't exist
                     return new ContentResult()
                     {
@@ -213,6 +220,7 @@ namespace DistSysAcw.Controllers
                 // Check if role exists
                 if (!(items["role"] == "User" || items["role"] == "Admin"))
                 {
+                    UserDatabaseAccess.WriteLog(DbContext, Request.Headers["ApiKey"], "Tried to change a role. But the role didn't exist.");
                     // Role doesn't exist
                     return new ContentResult()
                     {
@@ -222,8 +230,12 @@ namespace DistSysAcw.Controllers
                     };
                 }
 
+                string prevrole = UserDatabaseAccess.GetRole(DbContext, items["username"]);
+
                 // All checks done. Do work
                 UserDatabaseAccess.ChangeRole(DbContext, items["username"], items["role"]);
+
+                UserDatabaseAccess.WriteLog(DbContext, Request.Headers["ApiKey"], $"Changed {items["username"]}'s role from {prevrole} to {items["role"]}.");
 
                 return new ContentResult()
                 {
@@ -234,6 +246,8 @@ namespace DistSysAcw.Controllers
             }
             else // Incorrect keys
             {
+                UserDatabaseAccess.WriteLog(DbContext, Request.Headers["ApiKey"], $"Tried to change role, but provided incorrect Json keys.");
+
                 return new ContentResult()
                 {
                     Content = "NOT DONE: An error occured",

@@ -17,6 +17,7 @@ namespace DistSysAcw.Models
         public string ApiKey { get; set; }
         public string UserName { get; set; }
         public string Role { get; set; }
+        public virtual ICollection<Log> Logs { get; set; }
     }
 
     #region Task13?
@@ -123,6 +124,25 @@ namespace DistSysAcw.Models
             if (exists)
             {
                 var user = GetUser(context, guid);
+
+
+                var archLogs = new List<ArchivedLog>();
+                // Go through and archive their logs
+                foreach (var log in user.Logs)
+                {
+                    var archLog = new ArchivedLog()
+                    {
+                        ApiKey = user.ApiKey,
+                        Username = user.UserName,
+                        LogDateTime = log.LogDateTime,
+                        LogString = log.LogString
+                    };
+
+                    archLogs.Add(archLog);
+                }
+
+                context.ArchivedLogs.AddRange(archLogs.ToArray());
+
                 context.Users.Remove(user);
             }
 
@@ -136,6 +156,26 @@ namespace DistSysAcw.Models
             user.Role = role;
 
             context.SaveChanges();
+        }
+
+        public static void WriteLog(UserContext context, string apikey, string message)
+        {
+            var user = GetUser(context, apikey);
+
+            var newLog = new Log()
+            {
+                LogDateTime = DateTime.Now,
+                LogString = message
+            };
+
+            user.Logs.Add(newLog);
+
+            context.SaveChanges();
+        }
+
+        public static string GetRole(UserContext context, string username)
+        {
+            return GetUserUsername(context, username).Role;
         }
 
     }

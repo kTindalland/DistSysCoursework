@@ -28,6 +28,8 @@ namespace DistSysAcw.Controllers
         {
             var username = User.FindFirst(ClaimTypes.Name).Value;
 
+            UserDatabaseAccess.WriteLog(DbContext, Request.Headers["ApiKey"], "Asked for a hello.");
+
             return $"Hello {username}";
         }
 
@@ -36,6 +38,9 @@ namespace DistSysAcw.Controllers
         public string SHA1([FromQuery]string message)
         {
             var hashServ = new SHA1CryptoServiceProvider();
+
+            UserDatabaseAccess.WriteLog(DbContext, Request.Headers["ApiKey"], "Asked for a SHA1 hash.");
+
             return HashBackend(hashServ, message);
         }
 
@@ -44,6 +49,9 @@ namespace DistSysAcw.Controllers
         public string SHA256([FromQuery]string message)
         {
             var hashServ = new SHA256CryptoServiceProvider();
+
+            UserDatabaseAccess.WriteLog(DbContext, Request.Headers["ApiKey"], "Asked for a SHA256 hash.");
+
             return HashBackend(hashServ, message);
         }
 
@@ -68,6 +76,8 @@ namespace DistSysAcw.Controllers
         [HttpGet]
         public IActionResult GetPublicKey()
         {
+            UserDatabaseAccess.WriteLog(DbContext, Request.Headers["ApiKey"], "Asked for the public key.");
+
             return new ContentResult()
             {
                 Content = _cryptoService.ToXmlString(false),
@@ -80,6 +90,9 @@ namespace DistSysAcw.Controllers
         [HttpGet]
         public IActionResult Sign([FromQuery]string message)
         {
+
+            UserDatabaseAccess.WriteLog(DbContext, Request.Headers["ApiKey"], "Asked for a signature.");
+
             var messageBytes = Encoding.ASCII.GetBytes(message);
 
             var signedBytes = _cryptoService.SignData(messageBytes, new SHA1CryptoServiceProvider());

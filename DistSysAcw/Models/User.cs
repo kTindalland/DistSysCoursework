@@ -98,6 +98,25 @@ namespace DistSysAcw.Models
             return user;
         }
 
+        public static User GetUserWithLogs(UserContext context, string guid)
+        {
+            var user = new User()
+            {
+                ApiKey = "UNDEFINED",
+                Role = "UNDEFINED",
+                UserName = ""
+            };
+
+            var exists = CheckGuid(context, guid);
+
+            if (exists)
+            {
+                user = context.Users.Include(u => u.Logs).First(u => u.ApiKey == guid);
+            }
+
+            return user;
+        }
+
         public static User GetUserUsername(UserContext context, string username)
         {
             var user = new User()
@@ -160,8 +179,7 @@ namespace DistSysAcw.Models
 
         public static void WriteLog(UserContext context, string apikey, string message)
         {
-            /*
-            var user = GetUser(context, apikey);
+            var user = GetUserWithLogs(context, apikey);
 
             var newLog = new Log()
             {
@@ -172,7 +190,7 @@ namespace DistSysAcw.Models
             user.Logs.Add(newLog);
 
             context.SaveChanges();
-            */
+            
         }
 
         public static string GetRole(UserContext context, string username)

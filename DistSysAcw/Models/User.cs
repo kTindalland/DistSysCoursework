@@ -160,6 +160,7 @@ namespace DistSysAcw.Models
 
         public static void WriteLog(UserContext context, string apikey, string message)
         {
+            /*
             var user = GetUser(context, apikey);
 
             var newLog = new Log()
@@ -171,6 +172,7 @@ namespace DistSysAcw.Models
             user.Logs.Add(newLog);
 
             context.SaveChanges();
+            */
         }
 
         public static string GetRole(UserContext context, string username)

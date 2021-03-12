@@ -288,6 +288,8 @@ namespace DistSysAcwClient
         {
             Task<HttpResponseMessage> resultTask;
             Task<string> stringTask;
+            CspParameters cspParams;
+            RSACryptoServiceProvider rsa;
 
             if (words.Length < 2)
             {
@@ -416,11 +418,11 @@ namespace DistSysAcwClient
                     {
                         var signedMessage = stringTask.Result;
 
-                        var cspParams = new CspParameters
+                        cspParams = new CspParameters
                         {
                             Flags = CspProviderFlags.UseMachineKeyStore,
                         };
-                        var rsa = new RSACryptoServiceProvider(cspParams);
+                        rsa = new RSACryptoServiceProvider(cspParams);
 
                         rsa.FromXmlString(pubKey);
 
@@ -439,6 +441,93 @@ namespace DistSysAcwClient
                     {
                         Console.WriteLine(stringTask.Result);
                     }
+
+                    break;
+
+                case "AddFifty":
+                    if (words.Length < 3)
+                    {
+                        Console.WriteLine("Please enter number to add 50 to.");
+                        return;
+                    }
+
+                    // Try to parse the number.
+                    int number;
+                    bool valid = int.TryParse(words[2], out number);
+
+                    if (!valid)
+                    {
+                        Console.WriteLine("A valid integer must be given!");
+                        return;
+                    }
+
+                    // Check locals
+                    if (CheckLocals()) { break; }
+
+                    if (pubKey == "")
+                    {
+                        Console.WriteLine("Client doesn't yet have the public key");
+                        break;
+                    }
+
+                    // Here's where the fun begins...
+                    var aes = new AesCryptoServiceProvider();
+                    aes.GenerateKey();
+                    aes.GenerateIV();
+
+                    // Encrypt the key, iv, and number with servers public RSA key
+                    cspParams = new CspParameters
+                    {
+                        Flags = CspProviderFlags.UseMachineKeyStore,
+                    };
+                    rsa = new RSACryptoServiceProvider(cspParams);
+
+                    rsa.FromXmlString(pubKey);
+
+                    var enc_num = rsa.Encrypt(BitConverter.GetBytes(number), true);
+                    var enc_key = rsa.Encrypt(aes.Key, true);
+                    var enc_iv  = rsa.Encrypt(aes.IV,  true);
+
+                    var enc_num_string = BitConverter.ToString(enc_num);
+                    var enc_key_string = BitConverter.ToString(enc_key);
+                    var enc_iv_string = BitConverter.ToString(enc_iv);
+
+                    // Send off the request :)
+                    resultTask = SendRequest($"protected/addfifty?encryptedInteger={enc_num_string}&encryptedSymKey={enc_key_string}&encryptedIV={enc_iv_string}", HttpMethod.Get, true);
+                    Console.WriteLine("...please wait...");
+                    resultTask.Wait();
+
+                    stringTask = resultTask.Result.Content.ReadAsStringAsync();
+                    stringTask.Wait();
+
+                    var returned_hex = StringToByteArray(stringTask.Result);
+
+                    // Decrypt the number.
+                    var decryptor = aes.CreateDecryptor();
+                    string plaintext;
+
+                    using (MemoryStream ms = new MemoryStream(returned_hex))
+                    {
+                        using (CryptoStream cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
+                        {
+                            using (StreamReader sr = new StreamReader(cs))
+                            {
+                                plaintext = sr.ReadToEnd();
+                            }
+                        }
+                    }
+
+                    int resultNum;
+                    bool validNum = int.TryParse(plaintext, out resultNum);
+
+                    if (!validNum)
+                    {
+                        Console.WriteLine("An error occured!");
+                        break;
+                    }
+
+
+                    Console.WriteLine(resultNum.ToString());
 
                     break;
 
@@ -475,6 +564,31 @@ namespace DistSysAcwClient
 
             return result;
         }
+
+        // Hex convertion code form StackOverflow, slightly modified.
+        // https://stackoverflow.com/a/9995303
+        public static byte[] StringToByteArray(string hex)
+        {
+            // Strip the delimiters
+            hex = hex.Replace("-", string.Empty);
+
+            byte[] arr = new byte[hex.Length >> 1];
+
+            for (int i = 0; i < hex.Length >> 1; ++i)
+            {
+                arr[i] = (byte)((GetHexVal(hex[i << 1]) << 4) + (GetHexVal(hex[(i << 1) + 1])));
+            }
+
+            return arr;
+        }
+
+        public static int GetHexVal(char hex)
+        {
+            int val = (int)hex;
+            return val - (val < 58 ? 48 : 55);
+        }
+
+        // </stackoverflow>
 
     }
     #endregion

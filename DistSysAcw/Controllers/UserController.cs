@@ -83,7 +83,8 @@ namespace DistSysAcw.Controllers
                 {
                     return new ContentResult()
                     {
-                        Content = "Oops. Make sure your body contains a string with your username and your Content-Type is Content-Type:application/json",
+                        Content = "Oops. Make sure your body contains a string with your username and your " +
+                        "Content-Type is Content-Type:application/json",
                         StatusCode = 400
                     };
                 }

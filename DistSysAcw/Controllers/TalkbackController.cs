@@ -17,9 +17,7 @@ namespace DistSysAcw.Controllers
         [HttpGet]
         public string HelloWorld()
         {
-            #region TASK1
             return "Hello world";
-            #endregion
         }
 
         [ActionName("Sort")]
